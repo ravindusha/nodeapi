@@ -63,7 +63,41 @@ exports.findOne = function(req,res){
 };
 
 exports.update = function(req,res){
+  Note.findById(req.params.noteId, function (err, note) {
+    if (err) {
+      console.log(err);
 
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({
+          'message': 'Invalid Note ID '+req.params.noteId
+        });
+      }
+      return res.status(500).json({
+        'message': 'Error retrieving note'
+      })
+    }
+
+    if (!note) {
+      return res.status(404).json({
+        'message': 'Invalid Note ID '+req.params.noteId
+      });
+    }
+
+    note.title = req.body.title;
+    note.content = req.body.content;
+
+    note.save(function (err, data) {
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          'message': 'Could not update Note'
+        });
+      }else {
+        res.send(data);
+      }
+    });
+
+  });
 };
 
 exports.delete = function(req,res){
