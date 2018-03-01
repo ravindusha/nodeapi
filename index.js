@@ -29,6 +29,8 @@ app.get('/', (req,res)=>{
   });
 });
 
+require('./app/routes/note.routes.js')(app);
+
 app.get('/*', function (req,res) {
   res.status(400).json({
     'message':'Error! Invalid Request'});
