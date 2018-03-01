@@ -29,6 +29,11 @@ app.get('/', (req,res)=>{
   });
 });
 
+app.get('/*', function (req,res) {
+  res.status(400).json({
+    'message':'Error! Invalid Request'});
+});
+
 app.listen(3000, function(){
   console.log("Server started on port 3000...");
 })
