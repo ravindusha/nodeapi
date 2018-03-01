@@ -73,7 +73,7 @@ exports.update = function(req,res){
         });
       }
       return res.status(500).json({
-        'message': 'Error retrieving note'
+        'message': 'Error updating note'
       })
     }
 
@@ -101,5 +101,27 @@ exports.update = function(req,res){
 };
 
 exports.delete = function(req,res){
+  Note.findByIdAndRemove(req.params.noteId, function (err, note) {
+    if (err) {
+      console.log(err);
 
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({
+          'message': 'Invalid Note ID '+req.params.noteId
+        });
+      }
+      return res.status(500).json({
+        'message': 'Error deleting note'
+      })
+    }
+
+    if (!note) {
+      return res.status(404).json({
+        'message': 'Invalid Note ID '+req.params.noteId
+      });
+    }
+    res.json({
+      'message': 'Note deleted successfully!'
+    });
+  });
 };
